@@ -335,7 +335,8 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
 .about-art{aspect-ratio:4/5;border-radius:4px}
 .about-copy h2{font-size:clamp(2rem,4.2vw,2.8rem)}
 .about-copy p{font-size:1.05rem;max-width:52ch}
-.about-stats{display:flex;gap:2.5rem;margin-top:2rem;flex-wrap:wrap}
+.about-stats{display:flex;gap:2.5rem;margin-top:2rem}
+.about-stats > div{flex:1;min-width:0}
 .about-stats strong{display:block;font-family:var(--font-display);font-size:2rem}
 .about-stats span{font-size:.78rem;color:var(--ink-60);max-width:14ch;display:block}
 
@@ -515,7 +516,9 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
   .header-inner{padding:0 1.1rem}
   .logo-word{display:none}
   .hero-content h1{font-size:2.1rem}
-  .about-stats{flex-direction:column;gap:1.2rem}
+  .about-stats{gap:.9rem}
+  .about-stats strong{font-size:1.5rem}
+  .about-stats span{font-size:.7rem;max-width:none}
   .footer-top{flex-direction:column;align-items:flex-start}
   .nav-feature-text{flex-direction:column;align-items:flex-start;gap:.4rem}
 }
