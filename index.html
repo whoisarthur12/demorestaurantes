@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUNA — Restaurante de autor en Tulum</title>
+<meta name="description" content="DUNA: cocina de autor en Tulum donde el desierto se encuentra con el mar. Menú, ubicación y reservas.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="arc-motif" viewBox="0 0 120 32">
+    <path d="M2 26 C 22 2, 42 2, 62 16 C 82 30, 102 30, 118 8" />
+  </symbol>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="scroll-progress-mobile" aria-hidden="true"><span id="scrollProgressFill"></span></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma / Change language">
+      <span class="lang-opt" data-lang-btn="es">ES</span>
+      <span class="lang-sep">/</span>
+      <span class="lang-opt" data-lang-btn="en">EN</span>
+    </button>
+
+    <a href="#inicio" class="header-logo" aria-label="DUNA — inicio">
+      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17.5"/>
+        <path d="M4 24 C 12 12, 20 12, 24 18 C 28 24, 34 24, 36 16"/>
+      </svg>
+      <span class="logo-word">DUNA</span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navOverlay" aria-label="Abrir menú">
+      <span class="menu-toggle-lines"><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<aside class="daybar" id="dayBar">
+  <svg class="daybar-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
+  </svg>
+  <div class="daybar-track">
+    <span class="daybar-tick" style="top:0%"></span>
+    <span class="daybar-tick" style="top:50%"></span>
+    <span class="daybar-tick" style="top:100%"></span>
+    <div class="daybar-marker" id="dayMarker" style="top:0%">
+      <span class="daybar-label" id="dayLabel" data-es="mañana" data-en="morning">mañana</span>
+      <svg class="daybar-marker-arc" viewBox="0 0 24 8" aria-hidden="true"><path d="M1 6 C 6 1, 12 1, 23 6"/></svg>
+    </div>
+  </div>
+  <svg class="daybar-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>
+  </svg>
+</aside>
+
+<div class="nav-overlay" id="navOverlay">
+  <div class="nav-overlay-top">
+    <a href="#" class="btn btn-outline nav-book" data-whatsapp="book">
+      <span data-es="Reservar" data-en="Book now">Reservar</span>
+    </a>
+    <span class="nav-overlay-logo">DUNA</span>
+    <button class="nav-close" id="navClose" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>
+    </button>
+  </div>
+
+  <nav class="nav-links" aria-label="Navegación principal">
+    <a href="#inicio" class="nav-link" data-es="Inicio" data-en="Home">Inicio</a>
+    <a href="#nosotros" class="nav-link" data-es="Nosotros" data-en="About">Nosotros</a>
+    <a href="#menu" class="nav-link" data-es="Menú" data-en="Menu">Menú</a>
+    <a href="#galeria" class="nav-link" data-es="Galería" data-en="Gallery">Galería</a>
+    <a href="#eventos" class="nav-link" data-es="Eventos" data-en="Events">Eventos</a>
+    <a href="#ubicacion" class="nav-link" data-es="Ubicación" data-en="Location">Ubicación</a>
+  </nav>
+
+  <div class="nav-extra-links">
+    <a href="https://instagram.com/duna.tulum" target="_blank" rel="noopener">INSTAGRAM ↗</a>
+    <a href="#" data-whatsapp="gift"><span data-es="TARJETAS DE REGALO" data-en="GIFT CARDS">TARJETAS DE REGALO</span> ↗</a>
+  </div>
+
+  <div class="nav-feature">
+    <div class="nav-feature-art art art--dune">
+      <svg class="arc-icon big" viewBox="0 0 120 32" aria-hidden="true"><use href="#arc-motif"/></svg>
+    </div>
+    <div class="nav-feature-text">
+      <span data-es="UN DIÁLOGO ENTRE" data-en="A DIALOGUE BETWEEN">UN DIÁLOGO ENTRE</span>
+      <span data-es="MAR Y DESIERTO" data-en="SEA AND DESERT">MAR Y DESIERTO</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="inicio" class="hero">
+    <div class="art art--dusk hero-art"></div>
+    <div class="hero-content">
+      <h1 data-es="Donde el desierto se asoma al mar." data-en="Where the desert meets the sea.">Donde el desierto se asoma al mar.</h1>
+      <p data-es="Cocina de autor en Tulum. Humo del norte, sal del Caribe, temporada de la península." data-en="Author-driven cooking in Tulum. Northern smoke, Caribbean salt, whatever the peninsula is in season for.">Cocina de autor en Tulum. Humo del norte, sal del Caribe, temporada de la península.</p>
+      <a href="#" class="btn btn-primary" data-whatsapp="book">
+        <span data-es="Reservar por WhatsApp" data-en="Reserve on WhatsApp">Reservar por WhatsApp</span>
+      </a>
+    </div>
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <svg class="arc-icon" viewBox="0 0 120 32"><use href="#arc-motif"/></svg>
+      <span data-es="desliza" data-en="scroll">desliza</span>
+    </div>
+  </section>
+
+  <section id="nosotros" class="section about">
+    <div class="about-grid">
+      <div class="art art--interior about-art"></div>
+      <div class="about-copy">
+        <h2 data-es="Cocina que camina entre dos paisajes." data-en="Cooking that walks between two landscapes.">Cocina que camina entre dos paisajes.</h2>
+        <p data-es="DUNA nace de dos paisajes que el chef Ismael Cetina conoce de memoria: las dunas de Baja California donde creció, y la costa caribeña de Tulum donde decidió quedarse. Cada plato busca ese punto exacto donde el humo del desierto se encuentra con la sal del mar." data-en="DUNA comes from two landscapes chef Ismael Cetina knows by heart: the dunes of Baja California where he grew up, and the Caribbean coast of Tulum where he chose to stay. Every dish looks for that exact point where desert smoke meets sea salt.">DUNA nace de dos paisajes que el chef Ismael Cetina conoce de memoria: las dunas de Baja California donde creció, y la costa caribeña de Tulum donde decidió quedarse. Cada plato busca ese punto exacto donde el humo del desierto se encuentra con la sal del mar.</p>
+        <p class="muted" data-es="No hay una receta fija: hay temporada, hay pesca del día, hay lo que el mercado de Tulum tenga esa mañana. La cocina se ajusta; el punto de vista, no." data-en="There is no fixed recipe: there is season, there is the day's catch, there is whatever Tulum's market has that morning. The kitchen adjusts; the point of view doesn't.">No hay una receta fija: hay temporada, hay pesca del día, hay lo que el mercado de Tulum tenga esa mañana. La cocina se ajusta; el punto de vista, no.</p>
+        <div class="about-stats">
+          <div><strong>2019</strong><span data-es="Año de apertura" data-en="Opening year">Año de apertura</span></div>
+          <div><strong>100%</strong><span data-es="Pesca e ingredientes locales" data-en="Local catch &amp; ingredients">Pesca e ingredientes locales</span></div>
+          <div><strong>28</strong><span data-es="Cubiertos, mesa a mesa" data-en="Seats, table by table">Cubiertos, mesa a mesa</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="section menu-section">
+    <div class="menu-grid">
+      <div class="art art--plate menu-art"></div>
+      <div class="menu-content">
+        <span class="eyebrow" data-es="Menú" data-en="Menu">Menú</span>
+        <h2 data-es="Sabores que sostienen el instante." data-en="Flavors that hold the moment.">Sabores que sostienen el instante.</h2>
+        <p class="menu-intro" data-es="El desierto no es vacío: es resistencia hecha paisaje. El mar no es quieto: es memoria en movimiento. Aquí, cada plato es el punto exacto donde ambos se encuentran." data-en="The desert isn't empty — it's resistance turned into landscape. The sea isn't still — it's memory in motion. Here, every dish is the exact point where both meet.">El desierto no es vacío: es resistencia hecha paisaje. El mar no es quieto: es memoria en movimiento. Aquí, cada plato es el punto exacto donde ambos se encuentran.</p>
+
+        <div class="menu-categories">
+
+          <div class="menu-category">
+            <h3 data-es="Entradas" data-en="Starters">Entradas</h3>
+            <ul>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Aguachile de Callo</span><span class="menu-item-price">$220</span></div>
+                <p class="menu-item-desc" data-es="Callo de hacha, chile serrano, limón, aceite de cactus" data-en="Bay scallop, serrano chile, lime, cactus oil">Callo de hacha, chile serrano, limón, aceite de cactus</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Tostada de Atún Ahumado al Mezquite</span><span class="menu-item-price">$195</span></div>
+                <p class="menu-item-desc" data-es="Atún aleta amarilla, mayonesa de chipotle, aguacate" data-en="Yellowfin tuna, chipotle mayo, avocado">Atún aleta amarilla, mayonesa de chipotle, aguacate</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Ensalada de Nopal y Camarón</span><span class="menu-item-price">$180</span></div>
+                <p class="menu-item-desc" data-es="Nopal asado, camarón al carbón, queso fresco, vinagreta de tamarindo" data-en="Grilled nopal, charcoal shrimp, fresh cheese, tamarind vinaigrette">Nopal asado, camarón al carbón, queso fresco, vinagreta de tamarindo</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Ostras con Mignonette de Agave</span><span class="menu-item-price">$260</span></div>
+                <p class="menu-item-desc" data-es="Media docena, mignonette de vinagre de agave y cebolla morada" data-en="Half dozen, agave vinegar mignonette, red onion">Media docena, mignonette de vinagre de agave y cebolla morada</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-category">
+            <h3 data-es="Platos Fuertes" data-en="Mains">Platos Fuertes</h3>
+            <ul>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Pescado Zarandeado Estilo Desierto</span><span class="menu-item-price">$420</span></div>
+                <p class="menu-item-desc" data-es="Pescado del día, adobo de chile guajillo, sal de gusano" data-en="Catch of the day, guajillo chile adobo, worm salt">Pescado del día, adobo de chile guajillo, sal de gusano</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Costilla de Res Ahumada 12 Horas</span><span class="menu-item-price">$480</span></div>
+                <p class="menu-item-desc" data-es="Costilla braseada, puré de camote, salsa de mezcal" data-en="12-hour braised short rib, sweet potato purée, mezcal sauce">Costilla braseada, puré de camote, salsa de mezcal</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Pulpo a las Brasas</span><span class="menu-item-price">$450</span></div>
+                <p class="menu-item-desc" data-es="Pulpo al carbón, puré de frijol negro, polvo de chile pasilla" data-en="Charcoal octopus, black bean purée, pasilla chile powder">Pulpo al carbón, puré de frijol negro, polvo de chile pasilla</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Risotto de Erizo y Nopal</span><span class="menu-item-price">$390</span></div>
+                <p class="menu-item-desc" data-es="Arroz cremoso, erizo de mar, nopal salteado, hierbas del desierto" data-en="Creamy rice, sea urchin, sautéed nopal, desert herbs">Arroz cremoso, erizo de mar, nopal salteado, hierbas del desierto</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Tártar de Atún y Cactus</span><span class="menu-item-price">$340</span></div>
+                <p class="menu-item-desc" data-es="Atún fresco, ponzu de limón del desierto, tuétano de nopal" data-en="Fresh tuna, desert lime ponzu, nopal marrow">Atún fresco, ponzu de limón del desierto, tuétano de nopal</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-category">
+            <h3 data-es="Bebidas" data-en="Drinks">Bebidas</h3>
+            <ul>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name" data-es="Mezcal Espadín DUNA (copa)" data-en="DUNA Espadín Mezcal (glass)">Mezcal Espadín DUNA (copa)</span><span class="menu-item-price">$180</span></div>
+                <p class="menu-item-desc" data-es="Destilado artesanal de Oaxaca, sal de gusano y naranja" data-en="Artisanal Oaxacan spirit, worm salt and orange">Destilado artesanal de Oaxaca, sal de gusano y naranja</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Margarita de Tamarindo y Chile</span><span class="menu-item-price">$210</span></div>
+                <p class="menu-item-desc" data-es="Mezcal, tamarindo, chile de árbol" data-en="Mezcal, tamarind, árbol chile">Mezcal, tamarindo, chile de árbol</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Agua de Jamaica y Romero</span><span class="menu-item-price">$95</span></div>
+                <p class="menu-item-desc" data-es="Infusión fría de jamaica con romero del desierto" data-en="Cold hibiscus infusion with desert rosemary">Infusión fría de jamaica con romero del desierto</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name" data-es="Vino Blanco Valle de Guadalupe" data-en="Valle de Guadalupe White Wine">Vino Blanco Valle de Guadalupe</span><span class="menu-item-price">$175</span></div>
+                <p class="menu-item-desc" data-es="Copa, blend de la casa" data-en="Glass, house blend">Copa, blend de la casa</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-category">
+            <h3 data-es="Postres" data-en="Desserts">Postres</h3>
+            <ul>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Tarta de Dátil y Sal de Mar</span><span class="menu-item-price">$150</span></div>
+                <p class="menu-item-desc" data-es="Dátiles del desierto, caramelo salado, helado de vainilla" data-en="Desert dates, salted caramel, vanilla ice cream">Dátiles del desierto, caramelo salado, helado de vainilla</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Sorbete de Maracuyá y Cactus</span><span class="menu-item-price">$130</span></div>
+                <p class="menu-item-desc" data-es="Sorbete casero, ralladura de limón" data-en="House-made sorbet, lime zest">Sorbete casero, ralladura de limón</p>
+              </li>
+              <li>
+                <div class="menu-item-row"><span class="menu-item-name">Chocolate Ahumado con Mezcal</span><span class="menu-item-price">$165</span></div>
+                <p class="menu-item-desc" data-es="Mousse de chocolate oaxaqueño, reducción de mezcal" data-en="Oaxacan chocolate mousse, mezcal reduction">Mousse de chocolate oaxaqueño, reducción de mezcal</p>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria" class="section gallery-section">
+    <h2 data-es="Un vistazo a DUNA" data-en="A glimpse of DUNA">Un vistazo a DUNA</h2>
+    <div class="gallery-scroll">
+      <figure class="art art--dune gallery-item"><figcaption data-es="Al atardecer" data-en="At dusk">Al atardecer</figcaption></figure>
+      <figure class="art art--plate2 gallery-item"><figcaption data-es="Pulpo a las brasas" data-en="Charred octopus">Pulpo a las brasas</figcaption></figure>
+      <figure class="art art--wave gallery-item"><figcaption data-es="La costa, a dos cuadras" data-en="The coast, two blocks away">La costa, a dos cuadras</figcaption></figure>
+      <figure class="art art--glass gallery-item"><figcaption data-es="Barra de mezcal" data-en="Mezcal bar">Barra de mezcal</figcaption></figure>
+      <figure class="art art--interior2 gallery-item"><figcaption data-es="Sala principal" data-en="Main dining room">Sala principal</figcaption></figure>
+      <figure class="art art--citrus gallery-item"><figcaption data-es="Cítricos de temporada" data-en="Seasonal citrus">Cítricos de temporada</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="eventos" class="section events-section">
+    <div class="art art--dusk events-art" aria-hidden="true"></div>
+    <div class="events-inner">
+      <h2 data-es="Mesas privadas y grupos" data-en="Private tables &amp; groups">Mesas privadas y grupos</h2>
+      <p data-es="Organizamos cenas privadas, celebraciones y grupos de hasta 20 personas, con menú diseñado junto al chef." data-en="We host private dinners, celebrations and groups of up to 20, with a menu built alongside the chef.">Organizamos cenas privadas, celebraciones y grupos de hasta 20 personas, con menú diseñado junto al chef.</p>
+      <a href="#" class="btn btn-outline btn-on-dark" data-whatsapp="events">
+        <span data-es="Escríbenos por WhatsApp" data-en="Message us on WhatsApp">Escríbenos por WhatsApp</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="ubicacion" class="section location-section">
+    <div class="location-grid">
+      <div class="location-info">
+        <h2 data-es="Encuéntranos" data-en="Find us">Encuéntranos</h2>
+        <dl>
+          <dt data-es="Dirección" data-en="Address">Dirección</dt>
+          <dd>Calle Centauro Sur, Zona Hotelera, 77760 Tulum, Q.R., México</dd>
+          <dt data-es="Horario" data-en="Hours">Horario</dt>
+          <dd>
+            <span data-es="Comida" data-en="Lunch">Comida</span> 13:00–17:00<br>
+            <span data-es="Cena" data-en="Dinner">Cena</span> 18:00–23:00 · <span data-es="todos los días" data-en="every day">todos los días</span>
+          </dd>
+          <dt>WhatsApp</dt>
+          <dd>+52 984 130 5577</dd>
+        </dl>
+        <a href="#" class="btn btn-outline" data-whatsapp="book">
+          <span data-es="Reservar mesa" data-en="Reserve a table">Reservar mesa</span>
+        </a>
+      </div>
+      <div class="location-map">
+        <iframe title="Mapa DUNA Tulum" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=-87.4754%2C20.2044%2C-87.4554%2C20.2184&amp;layer=mapnik&amp;marker=20.2114%2C-87.4654"></iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17.5"/>
+        <path d="M4 24 C 12 12, 20 12, 24 18 C 28 24, 34 24, 36 16"/>
+      </svg>
+      <span class="logo-word">DUNA</span>
+    </div>
+    <nav class="footer-nav">
+      <a href="#inicio" data-es="Inicio" data-en="Home">Inicio</a>
+      <a href="#nosotros" data-es="Nosotros" data-en="About">Nosotros</a>
+      <a href="#menu" data-es="Menú" data-en="Menu">Menú</a>
+      <a href="#galeria" data-es="Galería" data-en="Gallery">Galería</a>
+      <a href="#ubicacion" data-es="Ubicación" data-en="Location">Ubicación</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://instagram.com/duna.tulum" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://facebook.com/duna.tulum" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DUNA · Tulum, Q.R.</span>
+    <span data-es="Reservas por WhatsApp" data-en="Reservations via WhatsApp">Reservas por WhatsApp</span>
+  </div>
+</footer>
+
+<a href="#" class="whatsapp-float" id="whatsappFloat" data-whatsapp="book" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.2 9 9.8 8 9.6 7.6c-.2-.4-.4-.3-.6-.3h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/>
+    <path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/>
+  </svg>
+</a>
+
+<script src="js/main.js"></script>
+</body>
+</html>

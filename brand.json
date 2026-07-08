@@ -1,0 +1,11 @@
+{
+  "nombre_negocio": "DUNA",
+  "tipo": "restaurante de autor",
+  "ubicacion": "Tulum, Quintana Roo, México",
+  "color_principal": "#1c1815",
+  "color_acento": "#c1633d",
+  "tiene_logo_real": false,
+  "tono_de_marca": "elegante y cálido, cercano sin ser corporativo",
+  "instagram": "@duna.tulum",
+  "notas_extra": "Prototipo/demo. Concepto: cocina que dialoga entre el mar Caribe y el desierto del norte de México, a cargo del chef Ismael Cetina. Como no hay fotografía real del negocio, la 'fotografía' del sitio se resolvió con un sistema propio de arte en CSS/SVG (degradados de atardecer, siluetas de duna/ola, grano sutil) construido sobre la misma paleta de marca — se reemplaza 1 a 1 por fotos reales del cliente cuando existan (ver clases .art / .art--* en css/styles.css)."
+}

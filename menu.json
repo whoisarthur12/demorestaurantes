@@ -1,0 +1,120 @@
+{
+  "categorias": [
+    {
+      "nombre": "Entradas",
+      "platos": [
+        {
+          "nombre": "Aguachile de Callo",
+          "descripcion": "Callo de hacha, chile serrano, limón, aceite de cactus",
+          "precio": "220",
+          "foto": "assets/photos/source/aguachile-callo.jpg"
+        },
+        {
+          "nombre": "Tostada de Atún Ahumado al Mezquite",
+          "descripcion": "Atún aleta amarilla, mayonesa de chipotle, aguacate",
+          "precio": "195",
+          "foto": "assets/photos/source/tostada-atun.jpg"
+        },
+        {
+          "nombre": "Ensalada de Nopal y Camarón",
+          "descripcion": "Nopal asado, camarón al carbón, queso fresco, vinagreta de tamarindo",
+          "precio": "180",
+          "foto": "assets/photos/source/ensalada-nopal.jpg"
+        },
+        {
+          "nombre": "Ostras con Mignonette de Agave",
+          "descripcion": "Media docena, mignonette de vinagre de agave y cebolla morada",
+          "precio": "260",
+          "foto": "assets/photos/source/ostras-agave.jpg"
+        }
+      ]
+    },
+    {
+      "nombre": "Platos Fuertes",
+      "platos": [
+        {
+          "nombre": "Pescado Zarandeado Estilo Desierto",
+          "descripcion": "Pescado del día, adobo de chile guajillo, sal de gusano",
+          "precio": "420",
+          "foto": "assets/photos/source/pescado-zarandeado.jpg"
+        },
+        {
+          "nombre": "Costilla de Res Ahumada 12 Horas",
+          "descripcion": "Costilla braseada, puré de camote, salsa de mezcal",
+          "precio": "480",
+          "foto": "assets/photos/source/costilla-ahumada.jpg"
+        },
+        {
+          "nombre": "Pulpo a las Brasas",
+          "descripcion": "Pulpo al carbón, puré de frijol negro, polvo de chile pasilla",
+          "precio": "450",
+          "foto": "assets/photos/source/pulpo-brasas.jpg"
+        },
+        {
+          "nombre": "Risotto de Erizo y Nopal",
+          "descripcion": "Arroz cremoso, erizo de mar, nopal salteado, hierbas del desierto",
+          "precio": "390",
+          "foto": "assets/photos/source/risotto-erizo.jpg"
+        },
+        {
+          "nombre": "Tártar de Atún y Cactus",
+          "descripcion": "Atún fresco, ponzu de limón del desierto, tuétano de nopal",
+          "precio": "340",
+          "foto": "assets/photos/source/tartar-atun.jpg"
+        }
+      ]
+    },
+    {
+      "nombre": "Bebidas",
+      "platos": [
+        {
+          "nombre": "Mezcal Espadín DUNA (copa)",
+          "descripcion": "Destilado artesanal de Oaxaca, servido con sal de gusano y naranja",
+          "precio": "180",
+          "foto": "assets/photos/source/mezcal-espadin.jpg"
+        },
+        {
+          "nombre": "Margarita de Tamarindo y Chile",
+          "descripcion": "Mezcal, tamarindo, chile de árbol",
+          "precio": "210",
+          "foto": "assets/photos/source/margarita-tamarindo.jpg"
+        },
+        {
+          "nombre": "Agua de Jamaica y Romero",
+          "descripcion": "Infusión fría de jamaica con romero del desierto",
+          "precio": "95",
+          "foto": "assets/photos/source/agua-jamaica.jpg"
+        },
+        {
+          "nombre": "Vino Blanco Valle de Guadalupe",
+          "descripcion": "Copa, blend de la casa",
+          "precio": "175",
+          "foto": "assets/photos/source/vino-blanco.jpg"
+        }
+      ]
+    },
+    {
+      "nombre": "Postres",
+      "platos": [
+        {
+          "nombre": "Tarta de Dátil y Sal de Mar",
+          "descripcion": "Dátiles del desierto, caramelo salado, helado de vainilla",
+          "precio": "150",
+          "foto": "assets/photos/source/tarta-datil.jpg"
+        },
+        {
+          "nombre": "Sorbete de Maracuyá y Cactus",
+          "descripcion": "Sorbete casero, ralladura de limón",
+          "precio": "130",
+          "foto": "assets/photos/source/sorbete-maracuya.jpg"
+        },
+        {
+          "nombre": "Chocolate Ahumado con Mezcal",
+          "descripcion": "Mousse de chocolate oaxaqueño, reducción de mezcal",
+          "precio": "165",
+          "foto": "assets/photos/source/chocolate-ahumado.jpg"
+        }
+      ]
+    }
+  ]
+}
