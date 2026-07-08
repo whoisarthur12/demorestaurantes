@@ -9,16 +9,26 @@
     events: { es: "Hola, quisiera cotizar un evento privado.", en: "Hi, I'd like a quote for a private event." }
   };
 
+  var DISH_MESSAGE = {
+    es: function (name) { return "Hola DUNA, quisiera pedir: " + name + "."; },
+    en: function (name) { return "Hi DUNA, I'd like to order: " + name + "."; }
+  };
+
   var currentLang = localStorage.getItem("duna-lang") === "en" ? "en" : "es";
 
-  function buildWaLink(kind) {
-    var msg = WHATSAPP_MESSAGES[kind] ? WHATSAPP_MESSAGES[kind][currentLang] : WHATSAPP_MESSAGES.book[currentLang];
+  function buildWaLink(kind, el) {
+    var msg;
+    if (kind === "dish" && el) {
+      msg = DISH_MESSAGE[currentLang](el.getAttribute("data-dish-name") || "");
+    } else {
+      msg = WHATSAPP_MESSAGES[kind] ? WHATSAPP_MESSAGES[kind][currentLang] : WHATSAPP_MESSAGES.book[currentLang];
+    }
     return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
   }
 
   function refreshWaLinks() {
     document.querySelectorAll("[data-whatsapp]").forEach(function (el) {
-      el.setAttribute("href", buildWaLink(el.getAttribute("data-whatsapp")));
+      el.setAttribute("href", buildWaLink(el.getAttribute("data-whatsapp"), el));
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener");
     });
@@ -75,18 +85,38 @@
     });
   }
 
+  // ===== Menu page: category tabs =====
+  var menuTabs = document.querySelectorAll(".menu-tab");
+  if (menuTabs.length) {
+    var dishCards = document.querySelectorAll(".dish-card");
+    menuTabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        menuTabs.forEach(function (t) { t.classList.remove("is-active"); });
+        tab.classList.add("is-active");
+        var cat = tab.getAttribute("data-tab");
+        dishCards.forEach(function (card) {
+          var show = cat === "all" || card.getAttribute("data-category") === cat;
+          card.classList.toggle("is-hidden", !show);
+        });
+      });
+    });
+  }
+
+  // ===== Scroll-driven UI: header state, progress bars, daybar contrast =====
   var header = document.getElementById("siteHeader");
-  var dayMarker = document.getElementById("dayMarker");
-  var dayLabel = document.getElementById("dayLabel");
-  var whatsappFloat = document.getElementById("whatsappFloat");
+  var dayBar = document.getElementById("dayBar");
+  var dayFill = document.getElementById("dayFill");
   var scrollProgressFill = document.getElementById("scrollProgressFill");
 
-  var DAY_STATES = [
-    { max: 0.22, es: "mañana", en: "morning" },
-    { max: 0.5, es: "tarde", en: "afternoon" },
-    { max: 0.78, es: "atardecer", en: "evening" },
-    { max: 1, es: "noche", en: "night" }
-  ];
+  function updateDaybarContrast() {
+    if (!dayBar) return;
+    var x = window.innerWidth - 40;
+    var y = window.innerHeight / 2;
+    var el = document.elementFromPoint(x, y);
+    var themed = el && el.closest("[data-daybar-theme]");
+    var theme = themed ? themed.getAttribute("data-daybar-theme") : "light";
+    dayBar.classList.toggle("is-dark", theme === "dark");
+  }
 
   var ticking = false;
 
@@ -97,23 +127,9 @@
     var pct = maxScroll > 0 ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) : 0;
 
     if (header) header.classList.toggle("scrolled", scrollTop > 40);
-    if (whatsappFloat) whatsappFloat.classList.toggle("visible", scrollTop > window.innerHeight * 0.6);
-
-    if (dayMarker) dayMarker.style.top = (pct * 100) + "%";
-
-    if (dayLabel) {
-      var state = DAY_STATES[DAY_STATES.length - 1];
-      for (var i = 0; i < DAY_STATES.length; i++) {
-        if (pct <= DAY_STATES[i].max) { state = DAY_STATES[i]; break; }
-      }
-      if (dayLabel.getAttribute("data-es") !== state.es) {
-        dayLabel.setAttribute("data-es", state.es);
-        dayLabel.setAttribute("data-en", state.en);
-        dayLabel.textContent = state[currentLang];
-      }
-    }
-
+    if (dayFill) dayFill.style.height = (pct * 100) + "%";
     if (scrollProgressFill) scrollProgressFill.style.width = (pct * 100) + "%";
+    updateDaybarContrast();
   }
 
   window.addEventListener("scroll", function () {
@@ -122,6 +138,9 @@
       ticking = true;
     }
   }, { passive: true });
+
+  var whatsappFloat = document.getElementById("whatsappFloat");
+  if (whatsappFloat) whatsappFloat.classList.add("visible");
 
   applyLang(currentLang);
   updateOnScroll();
