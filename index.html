@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
 
@@ -65,7 +65,7 @@
 
 <div class="nav-overlay" id="navOverlay">
   <div class="nav-overlay-top">
-    <a href="#" class="btn btn-outline nav-book" data-whatsapp="book">
+    <a href="#" class="btn btn-outline nav-book" data-whatsapp="book" data-booking-trigger="true">
       <span data-es="Reservar" data-en="Book now">Reservar</span>
     </a>
     <span class="nav-overlay-logo">DUNA</span>
@@ -106,7 +106,7 @@
     <div class="hero-content">
       <h1 data-es="Donde el desierto se asoma al mar." data-en="Where the desert meets the sea.">Donde el desierto se asoma al mar.</h1>
       <p data-es="Cocina de autor en Tulum. Humo del norte, sal del Caribe, temporada de la península." data-en="Author-driven cooking in Tulum. Northern smoke, Caribbean salt, whatever the peninsula is in season for.">Cocina de autor en Tulum. Humo del norte, sal del Caribe, temporada de la península.</p>
-      <a href="#" class="btn btn-primary" data-whatsapp="book">
+      <a href="#" class="btn btn-primary" data-whatsapp="book" data-booking-trigger="true">
         <span data-es="Reservar por WhatsApp" data-en="Reserve on WhatsApp">Reservar por WhatsApp</span>
       </a>
     </div>
@@ -191,7 +191,7 @@
           <dt>WhatsApp</dt>
           <dd>+52 984 130 5577</dd>
         </dl>
-        <a href="#" class="btn btn-outline" data-whatsapp="book">
+        <a href="#" class="btn btn-outline" data-whatsapp="book" data-booking-trigger="true">
           <span data-es="Reservar mesa" data-en="Reserve a table">Reservar mesa</span>
         </a>
       </div>
@@ -238,6 +238,113 @@
   </svg>
 </a>
 
-<script src="js/main.js?v=3"></script>
+<div class="booking-modal" id="bookingModal" aria-hidden="true">
+  <div class="booking-backdrop" id="bookingBackdrop"></div>
+  <div class="booking-panel" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+    <div class="booking-panel-header">
+      <span class="booking-panel-title" id="bookingTitle" data-es="Reservar mesa" data-en="Reserve a table">Reservar mesa</span>
+      <button class="booking-close" id="bookingClose" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      </button>
+    </div>
+
+    <div class="booking-progress">
+      <svg class="booking-progress-svg" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true">
+        <path class="booking-progress-track" d="M0 12 Q 25 0 50 12 T 100 12 T 150 12 T 200 12 T 250 12 T 300 12 T 350 12 T 400 12"/>
+        <path class="booking-progress-fill" id="bookingProgressFill" d="M0 12 Q 25 0 50 12 T 100 12 T 150 12 T 200 12 T 250 12 T 300 12 T 350 12 T 400 12"/>
+      </svg>
+      <div class="booking-progress-dots" id="bookingProgressDots">
+        <span class="booking-progress-dot" data-step-dot="0"></span>
+        <span class="booking-progress-dot" data-step-dot="1"></span>
+        <span class="booking-progress-dot" data-step-dot="2"></span>
+        <span class="booking-progress-dot" data-step-dot="3"></span>
+        <span class="booking-progress-dot" data-step-dot="4"></span>
+      </div>
+    </div>
+
+    <div class="booking-steps" id="bookingSteps">
+
+      <section class="booking-step" data-step="date">
+        <h3 class="booking-step-title" data-es="¿Qué día?" data-en="Which day?">¿Qué día?</h3>
+        <div class="booking-calendar">
+          <div class="booking-cal-header">
+            <button class="booking-cal-nav" id="bookingCalPrev" aria-label="Mes anterior" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <span class="booking-cal-month" id="bookingCalMonth">—</span>
+            <button class="booking-cal-nav" id="bookingCalNext" aria-label="Mes siguiente" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="booking-cal-weekdays" id="bookingCalWeekdays"></div>
+          <div class="booking-cal-days" id="bookingCalDays"></div>
+        </div>
+      </section>
+
+      <section class="booking-step" data-step="time">
+        <h3 class="booking-step-title" data-es="¿A qué hora?" data-en="What time?">¿A qué hora?</h3>
+        <div class="booking-time-group">
+          <span class="booking-time-group-label" data-es="Comida · 13:00–17:00" data-en="Lunch · 1:00–5:00 PM">Comida · 13:00–17:00</span>
+          <div class="booking-time-chips" id="bookingTimeChipsLunch"></div>
+        </div>
+        <div class="booking-time-group">
+          <span class="booking-time-group-label" data-es="Cena · 18:00–23:00" data-en="Dinner · 6:00–11:00 PM">Cena · 18:00–23:00</span>
+          <div class="booking-time-chips" id="bookingTimeChipsDinner"></div>
+        </div>
+      </section>
+
+      <section class="booking-step" data-step="guests">
+        <h3 class="booking-step-title" data-es="¿Cuántas personas?" data-en="How many guests?">¿Cuántas personas?</h3>
+        <div class="booking-stepper" id="bookingStepper">
+          <button class="booking-stepper-btn" id="bookingGuestsMinus" aria-label="Menos" type="button">−</button>
+          <span class="booking-stepper-value" id="bookingGuestsValue">2</span>
+          <button class="booking-stepper-btn" id="bookingGuestsPlus" aria-label="Más" type="button">+</button>
+        </div>
+        <p class="muted booking-hint" data-es="Grupos de más de 12 personas, escríbenos directo por WhatsApp." data-en="Groups larger than 12, message us directly on WhatsApp.">Grupos de más de 12 personas, escríbenos directo por WhatsApp.</p>
+      </section>
+
+      <section class="booking-step" data-step="contact">
+        <h3 class="booking-step-title" data-es="Tus datos" data-en="Your details">Tus datos</h3>
+        <div class="booking-field">
+          <label for="bookingName" data-es="Nombre" data-en="Name">Nombre</label>
+          <input type="text" id="bookingName" class="booking-input" autocomplete="name">
+          <span class="booking-field-error" data-es="Ingresá tu nombre" data-en="Enter your name">Ingresá tu nombre</span>
+        </div>
+        <div class="booking-field">
+          <label for="bookingPhone" data-es="Teléfono / WhatsApp" data-en="Phone / WhatsApp">Teléfono / WhatsApp</label>
+          <input type="tel" id="bookingPhone" class="booking-input" autocomplete="tel" placeholder="+52 984 000 0000">
+          <span class="booking-field-error" data-es="Ingresá un teléfono válido" data-en="Enter a valid phone number">Ingresá un teléfono válido</span>
+        </div>
+      </section>
+
+      <section class="booking-step" data-step="summary">
+        <h3 class="booking-step-title" data-es="Confirmá tu reserva" data-en="Confirm your reservation">Confirmá tu reserva</h3>
+        <div class="booking-ticket">
+          <svg class="arc-icon" viewBox="0 0 120 32" aria-hidden="true"><use href="#arc-motif"/></svg>
+          <dl class="booking-ticket-rows">
+            <div><dt data-es="Fecha" data-en="Date">Fecha</dt><dd id="bookingSummaryDate">—</dd></div>
+            <div><dt data-es="Hora" data-en="Time">Hora</dt><dd id="bookingSummaryTime">—</dd></div>
+            <div><dt data-es="Personas" data-en="Guests">Personas</dt><dd id="bookingSummaryGuests">—</dd></div>
+            <div><dt data-es="Nombre" data-en="Name">Nombre</dt><dd id="bookingSummaryName">—</dd></div>
+            <div><dt>WhatsApp</dt><dd id="bookingSummaryPhone">—</dd></div>
+          </dl>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="booking-nav">
+      <button class="btn btn-outline booking-back" id="bookingBack" type="button">
+        <span data-es="Atrás" data-en="Back">Atrás</span>
+      </button>
+      <button class="btn btn-primary booking-next" id="bookingNext" type="button">
+        <span data-es="Siguiente" data-en="Next">Siguiente</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/main.js?v=4"></script>
 </body>
 </html>
