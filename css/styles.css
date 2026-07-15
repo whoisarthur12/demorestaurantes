@@ -649,6 +649,137 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
 
 body.booking-locked{overflow:hidden}
 
+/* ===== "¿Qué pido?" teaser section ===== */
+.discover-teaser-inner{
+  max-width:520px;margin:0 auto;text-align:center;
+}
+.discover-teaser-icon{width:64px;margin:0 auto 1.5rem;color:var(--terracotta)}
+.discover-teaser-inner p{font-size:1.05rem;color:var(--ink-60);margin-bottom:2rem}
+
+/* ===== Discover modal (independiente del booking-modal, mismo lenguaje visual) ===== */
+.discover-modal{
+  position:fixed;inset:0;z-index:600;
+  display:flex;align-items:center;justify-content:center;
+  visibility:hidden;pointer-events:none;
+}
+.discover-modal.is-open{visibility:visible;pointer-events:auto}
+.discover-backdrop{
+  position:absolute;inset:0;background:rgba(28,24,21,.55);
+  opacity:0;transition:opacity .35s ease;
+}
+.discover-modal.is-open .discover-backdrop{opacity:1}
+
+.discover-panel{
+  position:relative;z-index:2;
+  width:min(560px, calc(100vw - 2.5rem));
+  max-height:min(680px, 90vh);
+  background:var(--cream);
+  border-radius:8px;
+  box-shadow:0 30px 60px rgba(28,24,21,.35);
+  display:flex;flex-direction:column;
+  padding:1.75rem 2rem 2rem;
+  opacity:0;transform:scale(.96) translateY(8px);
+  transition:opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
+  overflow:hidden;
+}
+.discover-modal.is-open .discover-panel{opacity:1;transform:scale(1) translateY(0)}
+
+.discover-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.5rem;flex-shrink:0;
+}
+.discover-panel-title{font-family:var(--font-display);font-size:1.5rem}
+.discover-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:-.5rem}
+.discover-close svg{width:20px;height:20px}
+.discover-close path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+
+.discover-steps{position:relative;overflow-x:hidden;overflow-y:auto;flex:1 1 auto;min-height:0}
+.discover-step{display:none;text-align:center}
+.discover-step.is-active{display:block}
+.discover-step.is-active.dir-fwd{animation:booking-in-fwd .45s cubic-bezier(.16,1,.3,1)}
+.discover-step.is-active.dir-back{animation:booking-in-back .45s cubic-bezier(.16,1,.3,1)}
+.discover-step-title{font-size:1.4rem;margin-bottom:1.5rem}
+
+.discover-back-link{
+  display:inline-flex;align-items:center;gap:.3em;margin-bottom:1rem;
+  font-size:.78rem;font-weight:600;letter-spacing:.03em;color:var(--ink-60);
+  transition:color .2s ease;
+}
+.discover-back-link:hover{color:var(--ink)}
+
+/* paso 0: elegir modo */
+.discover-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.discover-choice-card{
+  display:flex;flex-direction:column;align-items:center;gap:.85rem;
+  padding:2rem 1.25rem;border:1px solid var(--ink-15);border-radius:8px;
+  text-align:center;
+  transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .2s ease;
+}
+.discover-choice-card .arc-icon{width:40px;color:var(--terracotta)}
+.discover-choice-card-title{font-family:var(--font-display);font-size:1.15rem}
+.discover-choice-card-desc{font-size:.82rem;color:var(--ink-60)}
+.discover-choice-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(28,24,21,.14);border-color:var(--ink)}
+.discover-choice-card:active{transform:translateY(-1px)}
+
+/* quiz: preguntas esto-o-esto */
+.discover-choice-buttons{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.discover-choice-btn{
+  padding:1.75rem 1rem;min-height:44px;
+  border:1px solid var(--ink-15);border-radius:8px;
+  font-family:var(--font-display);font-size:1.3rem;
+  transition:background .2s ease, color .2s ease, border-color .2s ease, transform .25s cubic-bezier(.16,1,.3,1);
+}
+.discover-choice-btn:hover{border-color:var(--ink);transform:translateY(-3px)}
+.discover-choice-btn:active{transform:translateY(0)}
+
+/* ruleta */
+.discover-wheel-wrap{position:relative;width:min(280px, 68vw);aspect-ratio:1/1;margin:0 auto}
+.discover-wheel-pointer{
+  position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:0;height:0;z-index:3;
+  border-left:10px solid transparent;border-right:10px solid transparent;
+  border-top:16px solid var(--terracotta);
+}
+.discover-wheel-svg{width:100%;height:100%;display:block;transform:rotate(0deg)}
+.discover-wheel-svg text{font-family:var(--font-body);font-weight:700;font-size:13px;letter-spacing:.01em}
+.discover-wheel-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:76px;height:76px;border-radius:50%;
+  background:var(--cream);border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;z-index:2;
+  font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  box-shadow:0 6px 16px rgba(28,24,21,.2);
+  transition:background .2s ease, color .2s ease, transform .2s ease;
+}
+.discover-wheel-center:hover{background:var(--ink);color:var(--cream)}
+.discover-wheel-center:active{transform:translate(-50%,-50%) scale(.96)}
+.discover-wheel-center[disabled]{opacity:.5;pointer-events:none}
+
+/* resultado */
+@keyframes discover-reveal{
+  from{opacity:0;filter:blur(14px);transform:scale(.92)}
+  to{opacity:1;filter:blur(0);transform:scale(1)}
+}
+.discover-result-art{
+  width:180px;aspect-ratio:1/1;border-radius:50%;margin:0 auto 1.25rem;
+}
+.discover-result.is-revealed .discover-result-art,
+.discover-result.is-revealed .discover-result-name,
+.discover-result.is-revealed .discover-result-desc,
+.discover-result.is-revealed .discover-result-price,
+.discover-result.is-revealed .discover-result-actions{
+  animation:discover-reveal .7s cubic-bezier(.16,1,.3,1) both;
+}
+.discover-result.is-revealed .discover-result-name{animation-delay:.08s}
+.discover-result.is-revealed .discover-result-desc{animation-delay:.14s}
+.discover-result.is-revealed .discover-result-price{animation-delay:.18s}
+.discover-result.is-revealed .discover-result-actions{animation-delay:.24s}
+.discover-result-name{font-size:1.6rem;margin-bottom:.5rem}
+.discover-result-desc{color:var(--ink-60);max-width:40ch;margin:0 auto 1rem}
+.discover-result-price{display:block;font-weight:700;color:var(--terracotta);font-size:1.1rem;margin-bottom:1.5rem}
+.discover-result-actions{display:flex;flex-direction:column;gap:.75rem;align-items:center}
+.discover-result-actions .btn{width:100%;max-width:280px;justify-content:center}
+
 /* ===== Responsive ===== */
 @media (max-width:960px){
   .about-grid,.location-grid{grid-template-columns:1fr;gap:2.5rem}
@@ -696,6 +827,13 @@ body.booking-locked{overflow:hidden}
     width:100vw;height:100vh;height:100dvh;max-height:none;
     border-radius:0;padding:1.25rem 1.25rem 1.5rem;
   }
+
+  /* modal "¿qué pido?" a pantalla completa */
+  .discover-panel{
+    width:100vw;height:100vh;height:100dvh;max-height:none;
+    border-radius:0;padding:1.25rem 1.25rem 1.5rem;
+  }
+  .discover-choice-grid,.discover-choice-buttons{grid-template-columns:1fr}
 }
 
 @media (max-width:480px){
@@ -710,6 +848,8 @@ body.booking-locked{overflow:hidden}
   .booking-panel{padding:1rem 1rem 1.25rem}
   .booking-cal-days{gap:.1rem}
   .booking-stepper{gap:1.4rem}
+  .discover-panel{padding:1rem 1rem 1.25rem}
+  .discover-wheel-wrap{width:78vw}
 }
 
 /* ===== Respeta "reducir movimiento" del sistema operativo ===== */
@@ -727,4 +867,14 @@ body.booking-locked{overflow:hidden}
   .is-shaking{animation:none}
   .booking-progress-fill{transition:none}
   .booking-cal-day,.booking-cal-nav,.booking-time-chip,.booking-stepper-btn,.booking-progress-dot{transition:none}
+
+  .discover-panel{transition:none}
+  .discover-step.is-active.dir-fwd,.discover-step.is-active.dir-back{animation:none}
+  .discover-choice-card,.discover-choice-btn,.discover-wheel-center{transition:none}
+  .discover-wheel-svg{transition:none !important}
+  .discover-result.is-revealed .discover-result-art,
+  .discover-result.is-revealed .discover-result-name,
+  .discover-result.is-revealed .discover-result-desc,
+  .discover-result.is-revealed .discover-result-price,
+  .discover-result.is-revealed .discover-result-actions{animation:none}
 }

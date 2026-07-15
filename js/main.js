@@ -582,6 +582,259 @@
     });
   }
 
+  // ===== "¿Qué pido?" discover quiz + wheel (independiente del booking wizard) =====
+  var discoverModal = document.getElementById("discoverModal");
+  if (discoverModal) {
+    var DISCOVER_DISHES = [
+      {
+        name: "Aguachile de Callo",
+        desc: { es: "Callo de hacha, chile serrano, limón, aceite de cactus.", en: "Bay scallop, serrano chile, lime, cactus oil." },
+        price: "$220",
+        art: "art--dish-aguachile",
+        tags: ["mar", "picante", "individual"]
+      },
+      {
+        name: "Pescado Zarandeado Estilo Desierto",
+        desc: { es: "Pescado del día, adobo de chile guajillo, sal de gusano.", en: "Catch of the day, guajillo chile adobo, worm salt." },
+        price: "$420",
+        art: "art--dish-pescado",
+        tags: ["desierto", "picante", "compartir"]
+      },
+      {
+        name: "Pulpo a las Brasas",
+        desc: { es: "Pulpo al carbón, puré de frijol negro, polvo de chile pasilla.", en: "Charcoal octopus, black bean purée, pasilla chile powder." },
+        price: "$450",
+        art: "art--plate2",
+        tags: ["mar", "suave", "compartir"]
+      },
+      {
+        name: "Margarita de Tamarindo y Chile",
+        desc: { es: "Mezcal, tamarindo, chile de árbol.", en: "Mezcal, tamarind, árbol chile." },
+        price: "$210",
+        art: "art--glass",
+        tags: ["desierto", "picante", "individual"]
+      },
+      {
+        name: "Tarta de Dátil y Sal de Mar",
+        desc: { es: "Dátiles del desierto, caramelo salado, helado de vainilla.", en: "Desert dates, salted caramel, vanilla ice cream." },
+        price: "$150",
+        art: "art--dish-tarta",
+        tags: ["desierto", "suave", "compartir"]
+      }
+    ];
+
+    var QUIZ_ORDER = ["q1", "q2", "q3"];
+    var discoverStepsEls = discoverModal.querySelectorAll(".discover-step");
+    var discoverQuizAnswers = [];
+    var discoverMode = null;
+    var discoverWinner = null;
+    var wheelRotation = 0;
+    var wheelSpinning = false;
+
+    var discoverOpenBtn = document.getElementById("discoverOpenBtn");
+    var discoverCloseBtn = document.getElementById("discoverClose");
+    var discoverBackdrop = document.getElementById("discoverBackdrop");
+    var discoverStartQuizBtn = document.getElementById("discoverStartQuiz");
+    var discoverStartWheelBtn = document.getElementById("discoverStartWheel");
+    var discoverSpinBtn = document.getElementById("discoverSpinBtn");
+    var discoverWheelSvg = document.getElementById("discoverWheelSvg");
+    var discoverRetryBtn = document.getElementById("discoverRetryBtn");
+    var discoverResultEl = discoverModal.querySelector(".discover-result");
+    var discoverResultArt = document.getElementById("discoverResultArt");
+    var discoverResultName = document.getElementById("discoverResultName");
+    var discoverResultDesc = document.getElementById("discoverResultDesc");
+    var discoverResultPrice = document.getElementById("discoverResultPrice");
+    var discoverResultCta = document.getElementById("discoverResultCta");
+
+    var WHEEL_COLORS = ["#c1633d", "#1c1815", "#d8c9b3", "#6b7355", "#a14e30"];
+    var WHEEL_TEXT_COLORS = ["#f2ede4", "#f2ede4", "#1c1815", "#f2ede4", "#f2ede4"];
+
+    function showDiscoverStep(stepName, direction) {
+      discoverStepsEls.forEach(function (el) {
+        el.classList.remove("dir-fwd", "dir-back", "is-active");
+        if (el.getAttribute("data-discover-step") === stepName) {
+          el.classList.add("is-active");
+          void el.offsetWidth;
+          el.classList.add(direction === -1 ? "dir-back" : "dir-fwd");
+        }
+      });
+    }
+
+    function resetDiscover() {
+      discoverQuizAnswers = [];
+      discoverMode = null;
+      discoverWinner = null;
+      wheelRotation = 0;
+      if (discoverWheelSvg) {
+        discoverWheelSvg.style.transition = "none";
+        discoverWheelSvg.style.transform = "rotate(0deg)";
+        void discoverWheelSvg.offsetWidth;
+        discoverWheelSvg.style.transition = "";
+      }
+      if (discoverResultEl) discoverResultEl.classList.remove("is-revealed");
+      showDiscoverStep("choice", 1);
+    }
+
+    function openDiscover() {
+      resetDiscover();
+      discoverModal.classList.add("is-open");
+      discoverModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("booking-locked");
+    }
+
+    function closeDiscover() {
+      discoverModal.classList.remove("is-open");
+      discoverModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("booking-locked");
+    }
+
+    function computeQuizMatch(answers) {
+      var best = DISCOVER_DISHES[0];
+      var bestScore = -1;
+      DISCOVER_DISHES.forEach(function (dish) {
+        var score = 0;
+        answers.forEach(function (tag) {
+          if (dish.tags.indexOf(tag) !== -1) score++;
+        });
+        if (score > bestScore) {
+          bestScore = score;
+          best = dish;
+        }
+      });
+      return best;
+    }
+
+    function buildWheel() {
+      if (!discoverWheelSvg || discoverWheelSvg.childNodes.length) return;
+      var n = DISCOVER_DISHES.length;
+      var slice = 360 / n;
+      var cx = 150, cy = 150, r = 140;
+      var svgNS = "http://www.w3.org/2000/svg";
+      for (var i = 0; i < n; i++) {
+        var startAngle = i * slice - 90 - slice / 2;
+        var endAngle = startAngle + slice;
+        var startRad = startAngle * Math.PI / 180;
+        var endRad = endAngle * Math.PI / 180;
+        var x1 = cx + r * Math.cos(startRad);
+        var y1 = cy + r * Math.sin(startRad);
+        var x2 = cx + r * Math.cos(endRad);
+        var y2 = cy + r * Math.sin(endRad);
+        var path = document.createElementNS(svgNS, "path");
+        path.setAttribute("d", "M" + cx + "," + cy + " L" + x1 + "," + y1 + " A" + r + "," + r + " 0 0,1 " + x2 + "," + y2 + " Z");
+        path.setAttribute("fill", WHEEL_COLORS[i % WHEEL_COLORS.length]);
+        discoverWheelSvg.appendChild(path);
+
+        var midAngle = (startAngle + endAngle) / 2;
+        var midRad = midAngle * Math.PI / 180;
+        var tx = cx + (r * 0.62) * Math.cos(midRad);
+        var ty = cy + (r * 0.62) * Math.sin(midRad);
+        var text = document.createElementNS(svgNS, "text");
+        text.setAttribute("x", tx);
+        text.setAttribute("y", ty);
+        text.setAttribute("fill", WHEEL_TEXT_COLORS[i % WHEEL_TEXT_COLORS.length]);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("transform", "rotate(" + (midAngle + 90) + "," + tx + "," + ty + ")");
+        text.textContent = DISCOVER_DISHES[i].name.split(" ").slice(0, 2).join(" ");
+        discoverWheelSvg.appendChild(text);
+      }
+    }
+
+    function showDiscoverResult(direction) {
+      var dish = discoverWinner;
+      if (!dish) return;
+      discoverResultArt.className = "art discover-result-art " + dish.art;
+      discoverResultName.textContent = dish.name;
+      discoverResultDesc.textContent = dish.desc[currentLang];
+      discoverResultPrice.textContent = dish.price;
+      discoverResultCta.setAttribute("data-dish-name", dish.name);
+      discoverResultCta.setAttribute("href", buildWaLink("dish", discoverResultCta));
+      setBilingualText(
+        discoverRetryBtn.querySelector("span"),
+        discoverMode === "wheel" ? "Girar de nuevo" : "Volver a intentar",
+        discoverMode === "wheel" ? "Spin again" : "Try again"
+      );
+      showDiscoverStep("result", direction);
+      if (discoverResultEl) {
+        discoverResultEl.classList.remove("is-revealed");
+        void discoverResultEl.offsetWidth;
+        discoverResultEl.classList.add("is-revealed");
+      }
+    }
+
+    discoverOpenBtn.addEventListener("click", openDiscover);
+    discoverCloseBtn.addEventListener("click", closeDiscover);
+    discoverBackdrop.addEventListener("click", closeDiscover);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && discoverModal.classList.contains("is-open")) closeDiscover();
+    });
+    discoverModal.querySelectorAll("[data-discover-back]").forEach(function (btn) {
+      btn.addEventListener("click", function () { showDiscoverStep("choice", -1); });
+    });
+
+    discoverStartQuizBtn.addEventListener("click", function () {
+      discoverMode = "quiz";
+      discoverQuizAnswers = [];
+      showDiscoverStep("q1", 1);
+    });
+
+    discoverModal.querySelectorAll(".discover-choice-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        discoverQuizAnswers.push(btn.getAttribute("data-quiz-tag"));
+        var qIndex = discoverQuizAnswers.length;
+        if (qIndex < QUIZ_ORDER.length) {
+          showDiscoverStep(QUIZ_ORDER[qIndex], 1);
+        } else {
+          discoverWinner = computeQuizMatch(discoverQuizAnswers);
+          showDiscoverResult(1);
+        }
+      });
+    });
+
+    discoverStartWheelBtn.addEventListener("click", function () {
+      discoverMode = "wheel";
+      buildWheel();
+      showDiscoverStep("wheel", 1);
+    });
+
+    discoverSpinBtn.addEventListener("click", function () {
+      if (wheelSpinning) return;
+      var n = DISCOVER_DISHES.length;
+      var winnerIndex = Math.floor(Math.random() * n);
+      discoverWinner = DISCOVER_DISHES[winnerIndex];
+      var slice = 360 / n;
+
+      if (prefersReducedMotion) {
+        showDiscoverResult(1);
+        return;
+      }
+
+      wheelSpinning = true;
+      discoverSpinBtn.setAttribute("disabled", "true");
+      var jitter = (Math.random() - 0.5) * (slice * 0.6);
+      var targetInSlice = (360 - winnerIndex * slice) % 360;
+      var extraSpins = 360 * 4;
+      wheelRotation = wheelRotation - (wheelRotation % 360) + extraSpins + targetInSlice + jitter;
+      discoverWheelSvg.style.transition = "transform 3.6s cubic-bezier(0.15,0.7,0.2,1)";
+      discoverWheelSvg.style.transform = "rotate(" + wheelRotation + "deg)";
+
+      window.setTimeout(function () {
+        wheelSpinning = false;
+        discoverSpinBtn.removeAttribute("disabled");
+        showDiscoverResult(1);
+      }, 3700);
+    });
+
+    discoverRetryBtn.addEventListener("click", function () {
+      if (discoverMode === "wheel") {
+        showDiscoverStep("wheel", -1);
+      } else {
+        discoverQuizAnswers = [];
+        showDiscoverStep("q1", -1);
+      }
+    });
+  }
+
   initReveal();
   initCounters();
 

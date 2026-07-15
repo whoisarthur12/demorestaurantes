@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=5">
 </head>
 <body>
 
@@ -150,6 +150,17 @@
           <span data-es="Ver menú completo" data-en="View full menu">Ver menú completo</span>
         </a>
       </div>
+    </div>
+  </section>
+
+  <section id="descubre" class="section discover-teaser" data-daybar-theme="light">
+    <div class="discover-teaser-inner reveal">
+      <svg class="arc-icon big discover-teaser-icon" viewBox="0 0 120 32" aria-hidden="true"><use href="#arc-motif"/></svg>
+      <h2 data-es="¿No sabés qué pedir?" data-en="Not sure what to order?">¿No sabés qué pedir?</h2>
+      <p data-es="Respondé 3 preguntas o giramos la ruleta — vos elegís cómo." data-en="Answer 3 questions or spin the wheel — you choose how.">Respondé 3 preguntas o giramos la ruleta — vos elegís cómo.</p>
+      <button class="btn btn-primary" id="discoverOpenBtn" type="button">
+        <span data-es="¿Qué pido?" data-en="What should I order?">¿Qué pido?</span>
+      </button>
     </div>
   </section>
 
@@ -345,6 +356,91 @@
   </div>
 </div>
 
-<script src="js/main.js?v=4"></script>
+<div class="discover-modal" id="discoverModal" aria-hidden="true">
+  <div class="discover-backdrop" id="discoverBackdrop"></div>
+  <div class="discover-panel" role="dialog" aria-modal="true" aria-labelledby="discoverTitle">
+    <div class="discover-panel-header">
+      <span class="discover-panel-title" id="discoverTitle" data-es="¿Qué pido?" data-en="What should I order?">¿Qué pido?</span>
+      <button class="discover-close" id="discoverClose" aria-label="Cerrar" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      </button>
+    </div>
+
+    <div class="discover-steps" id="discoverSteps">
+
+      <section class="discover-step" data-discover-step="choice">
+        <div class="discover-choice-grid">
+          <button class="discover-choice-card" id="discoverStartQuiz" type="button">
+            <svg class="arc-icon" viewBox="0 0 120 32" aria-hidden="true"><use href="#arc-motif"/></svg>
+            <span class="discover-choice-card-title" data-es="Responde y te recomendamos" data-en="Answer and we'll recommend">Responde y te recomendamos</span>
+            <span class="discover-choice-card-desc" data-es="3 preguntas rápidas, sin azar." data-en="3 quick questions, no luck involved.">3 preguntas rápidas, sin azar.</span>
+          </button>
+          <button class="discover-choice-card" id="discoverStartWheel" type="button">
+            <svg class="arc-icon" viewBox="0 0 120 32" aria-hidden="true"><use href="#arc-motif"/></svg>
+            <span class="discover-choice-card-title" data-es="Gira la ruleta" data-en="Spin the wheel">Gira la ruleta</span>
+            <span class="discover-choice-card-desc" data-es="Dejá que el azar elija por vos." data-en="Let chance choose for you.">Dejá que el azar elija por vos.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="discover-step" data-discover-step="q1">
+        <button class="discover-back-link" data-discover-back type="button">‹ <span data-es="Elegir otro modo" data-en="Choose another way">Elegir otro modo</span></button>
+        <h3 class="discover-step-title" data-es="¿Mar o desierto?" data-en="Sea or desert?">¿Mar o desierto?</h3>
+        <div class="discover-choice-buttons">
+          <button class="discover-choice-btn" data-quiz-tag="mar" type="button" data-es="Mar" data-en="Sea">Mar</button>
+          <button class="discover-choice-btn" data-quiz-tag="desierto" type="button" data-es="Desierto" data-en="Desert">Desierto</button>
+        </div>
+      </section>
+
+      <section class="discover-step" data-discover-step="q2">
+        <h3 class="discover-step-title" data-es="¿Picante o suave?" data-en="Spicy or mild?">¿Picante o suave?</h3>
+        <div class="discover-choice-buttons">
+          <button class="discover-choice-btn" data-quiz-tag="picante" type="button" data-es="Picante" data-en="Spicy">Picante</button>
+          <button class="discover-choice-btn" data-quiz-tag="suave" type="button" data-es="Suave" data-en="Mild">Suave</button>
+        </div>
+      </section>
+
+      <section class="discover-step" data-discover-step="q3">
+        <h3 class="discover-step-title" data-es="¿Para compartir o solo para vos?" data-en="To share or just for you?">¿Para compartir o solo para vos?</h3>
+        <div class="discover-choice-buttons">
+          <button class="discover-choice-btn" data-quiz-tag="compartir" type="button" data-es="Compartir" data-en="To share">Compartir</button>
+          <button class="discover-choice-btn" data-quiz-tag="individual" type="button" data-es="Solo para mí" data-en="Just for me">Solo para mí</button>
+        </div>
+      </section>
+
+      <section class="discover-step" data-discover-step="wheel">
+        <button class="discover-back-link" data-discover-back type="button">‹ <span data-es="Elegir otro modo" data-en="Choose another way">Elegir otro modo</span></button>
+        <h3 class="discover-step-title" data-es="Gira y descubrí tu plato" data-en="Spin to discover your dish">Gira y descubrí tu plato</h3>
+        <div class="discover-wheel-wrap">
+          <div class="discover-wheel-pointer" aria-hidden="true"></div>
+          <svg class="discover-wheel-svg" id="discoverWheelSvg" viewBox="0 0 300 300" aria-hidden="true"></svg>
+          <button class="discover-wheel-center" id="discoverSpinBtn" type="button">
+            <span data-es="Girar" data-en="Spin">Girar</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="discover-step" data-discover-step="result">
+        <div class="discover-result">
+          <div class="art discover-result-art" id="discoverResultArt"></div>
+          <h3 class="discover-result-name" id="discoverResultName">—</h3>
+          <p class="discover-result-desc" id="discoverResultDesc">—</p>
+          <span class="discover-result-price" id="discoverResultPrice">—</span>
+          <div class="discover-result-actions">
+            <a href="#" class="btn btn-primary" id="discoverResultCta" data-whatsapp="dish" target="_blank" rel="noopener">
+              <span data-es="Pedir por WhatsApp" data-en="Order via WhatsApp">Pedir por WhatsApp</span>
+            </a>
+            <button class="btn btn-outline" id="discoverRetryBtn" type="button">
+              <span data-es="Intentar de nuevo" data-en="Try again">Intentar de nuevo</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js?v=5"></script>
 </body>
 </html>
