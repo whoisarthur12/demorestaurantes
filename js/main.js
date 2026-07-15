@@ -140,9 +140,6 @@
     }
   }, { passive: true });
 
-  var whatsappFloat = document.getElementById("whatsappFloat");
-  if (whatsappFloat) whatsappFloat.classList.add("visible");
-
   // ===== Reveal on scroll + animated counters =====
   var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
