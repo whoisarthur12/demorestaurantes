@@ -457,20 +457,6 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
   font-size:.75rem;color:var(--cream-60);
 }
 
-/* ===== WhatsApp float ===== */
-.whatsapp-float{
-  position:fixed;right:1.5rem;bottom:1.5rem;z-index:180;
-  width:52px;height:52px;border-radius:50%;
-  background:var(--terracotta);color:var(--cream);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 18px rgba(28,24,21,.25);
-  opacity:0;transform:translateY(12px) scale(.9);pointer-events:none;
-  transition:opacity .25s ease, transform .25s ease, background .2s ease;
-}
-.whatsapp-float.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
-.whatsapp-float:hover{background:var(--terracotta-dark)}
-.whatsapp-float svg{width:24px;height:24px;fill:currentColor}
-
 /* ===== Booking wizard modal ===== */
 .booking-modal{
   position:fixed;inset:0;z-index:600;
