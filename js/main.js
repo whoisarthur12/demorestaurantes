@@ -898,6 +898,156 @@
     });
   }
 
+  // ===== Hero particles (arena/espuma) — un solo canvas, liviano =====
+  var heroCanvas = document.getElementById("heroParticles");
+  if (heroCanvas && !prefersReducedMotion) {
+    var heroEl = heroCanvas.closest(".hero");
+    var pCtx = heroCanvas.getContext("2d");
+    var pParticles = [];
+    var pWidth = 0, pHeight = 0;
+    var pMouseX = null, pMouseY = null;
+    var pRafId = null;
+    var pRunning = false;
+    var pDpr = Math.min(window.devicePixelRatio || 1, 2);
+    var INFLUENCE_RADIUS = 110;
+    var PUSH_STRENGTH = 18;
+
+    function pGetCount() {
+      var isMobile = window.innerWidth < 760;
+      var base = isMobile ? 18 : 45;
+      var cores = navigator.hardwareConcurrency || 8;
+      if (cores < 4) base = Math.round(base / 2);
+      return base;
+    }
+
+    function pResize() {
+      var rect = heroEl.getBoundingClientRect();
+      pWidth = rect.width;
+      pHeight = rect.height;
+      heroCanvas.width = pWidth * pDpr;
+      heroCanvas.height = pHeight * pDpr;
+      heroCanvas.style.width = pWidth + "px";
+      heroCanvas.style.height = pHeight + "px";
+      pCtx.setTransform(pDpr, 0, 0, pDpr, 0, 0);
+    }
+
+    function pMakeParticle() {
+      return {
+        baseX: Math.random() * pWidth,
+        baseY: Math.random() * pHeight,
+        dispX: 0,
+        dispY: 0,
+        speed: 0.15 + Math.random() * 0.25,
+        radius: 1 + Math.random() * 2,
+        opacity: 0.12 + Math.random() * 0.3,
+        phase: Math.random() * 1000
+      };
+    }
+
+    function pInit() {
+      pResize();
+      var count = pGetCount();
+      pParticles = [];
+      for (var i = 0; i < count; i++) pParticles.push(pMakeParticle());
+    }
+
+    function pStep() {
+      pCtx.clearRect(0, 0, pWidth, pHeight);
+      for (var i = 0; i < pParticles.length; i++) {
+        var p = pParticles[i];
+        p.baseY -= p.speed;
+        if (p.baseY < -10) {
+          p.baseY = pHeight + 10;
+          p.baseX = Math.random() * pWidth;
+        }
+        p.baseX += Math.sin((p.baseY + p.phase) * 0.008) * 0.25;
+
+        if (pMouseX !== null) {
+          var dx = p.baseX - pMouseX;
+          var dy = p.baseY - pMouseY;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < INFLUENCE_RADIUS && dist > 0.01) {
+            var force = (1 - dist / INFLUENCE_RADIUS) * PUSH_STRENGTH;
+            p.dispX += (dx / dist) * force * 0.06;
+            p.dispY += (dy / dist) * force * 0.06;
+          }
+        }
+        p.dispX *= 0.94;
+        p.dispY *= 0.94;
+
+        var x = p.baseX + p.dispX;
+        var y = p.baseY + p.dispY;
+
+        pCtx.beginPath();
+        pCtx.arc(x, y, p.radius, 0, Math.PI * 2);
+        pCtx.fillStyle = "rgba(242,237,228," + p.opacity + ")";
+        pCtx.fill();
+      }
+      if (pRunning) pRafId = window.requestAnimationFrame(pStep);
+    }
+
+    function pStart() {
+      if (pRunning) return;
+      pRunning = true;
+      pRafId = window.requestAnimationFrame(pStep);
+    }
+
+    function pStop() {
+      pRunning = false;
+      if (pRafId) window.cancelAnimationFrame(pRafId);
+      pRafId = null;
+    }
+
+    heroEl.addEventListener("mousemove", function (e) {
+      var rect = heroEl.getBoundingClientRect();
+      pMouseX = e.clientX - rect.left;
+      pMouseY = e.clientY - rect.top;
+    }, { passive: true });
+    heroEl.addEventListener("mouseleave", function () {
+      pMouseX = null;
+      pMouseY = null;
+    });
+    heroEl.addEventListener("touchmove", function (e) {
+      if (!e.touches || !e.touches.length) return;
+      var rect = heroEl.getBoundingClientRect();
+      pMouseX = e.touches[0].clientX - rect.left;
+      pMouseY = e.touches[0].clientY - rect.top;
+    }, { passive: true });
+    heroEl.addEventListener("touchend", function () {
+      pMouseX = null;
+      pMouseY = null;
+    });
+
+    var pResizeTimeout = null;
+    window.addEventListener("resize", function () {
+      window.clearTimeout(pResizeTimeout);
+      pResizeTimeout = window.setTimeout(pInit, 250);
+    });
+
+    if ("IntersectionObserver" in window) {
+      var pObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) pStart();
+          else pStop();
+        });
+      }, { threshold: 0.05 });
+      pObserver.observe(heroEl);
+    } else {
+      pStart();
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        pStop();
+      } else {
+        var r = heroEl.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) pStart();
+      }
+    });
+
+    pInit();
+  }
+
   initReveal();
   initCounters();
 
