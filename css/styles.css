@@ -276,6 +276,7 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
 .nav-links .nav-link:nth-child(4){transition-delay:.33s}
 .nav-links .nav-link:nth-child(5){transition-delay:.39s}
 .nav-links .nav-link:nth-child(6){transition-delay:.45s}
+.nav-links .nav-link:nth-child(7){transition-delay:.51s}
 .nav-link::after{
   content:"";position:absolute;left:8%;right:8%;bottom:.12em;height:6px;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'><path d='M2 8 C 20 2, 40 2, 60 7 C 80 12, 100 12, 118 4' fill='none' stroke='%23c1633d' stroke-width='2'/></svg>");
@@ -661,13 +662,6 @@ body.nav-locked .daybar{opacity:0;pointer-events:none}
 .booking-next.is-disabled{opacity:.4}
 
 body.booking-locked{overflow:hidden}
-
-/* ===== "¿Qué pido?" teaser section ===== */
-.discover-teaser-inner{
-  max-width:520px;margin:0 auto;text-align:center;
-}
-.discover-teaser-icon{width:64px;margin:0 auto 1.5rem;color:var(--terracotta)}
-.discover-teaser-inner p{font-size:1.05rem;color:var(--ink-60);margin-bottom:2rem}
 
 /* ===== Discover modal (independiente del booking-modal, mismo lenguaje visual) ===== */
 .discover-modal{
