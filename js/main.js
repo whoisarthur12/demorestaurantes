@@ -386,6 +386,69 @@
     document.getElementById("bookingSummaryGuests").textContent = bookingState.guests;
     document.getElementById("bookingSummaryName").textContent = bookingState.name || "—";
     document.getElementById("bookingSummaryPhone").textContent = bookingState.phone || "—";
+
+    var gcalLink = document.getElementById("bookingGCalLink");
+    var icsLink = document.getElementById("bookingIcsLink");
+    if (gcalLink) gcalLink.setAttribute("href", buildGoogleCalendarUrl());
+    if (icsLink) icsLink.setAttribute("href", buildIcsDataUri());
+  }
+
+  var CALENDAR_LOCATION = "Calle Centauro Sur, Zona Hotelera, 77760 Tulum, Q.R., México";
+  var CALENDAR_TITLE = { es: "Reserva en DUNA", en: "Reservation at DUNA" };
+
+  function bookingEventDates() {
+    if (!bookingState.date || !bookingState.time) return null;
+    var parts = bookingState.time.split(":");
+    var hour = parseInt(parts[0], 10);
+    var minute = parseInt(parts[1], 10);
+    var start = new Date(bookingState.date.getFullYear(), bookingState.date.getMonth(), bookingState.date.getDate(), hour, minute, 0);
+    var end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+    return { start: start, end: end };
+  }
+
+  function toUtcCompact(date) {
+    return date.getUTCFullYear() + pad2(date.getUTCMonth() + 1) + pad2(date.getUTCDate()) + "T" +
+      pad2(date.getUTCHours()) + pad2(date.getUTCMinutes()) + pad2(date.getUTCSeconds()) + "Z";
+  }
+
+  function bookingCalendarDetails() {
+    var labels = BOOKING_LABELS[currentLang];
+    return labels.guests + ": " + bookingState.guests + "\n" + labels.name + ": " + bookingState.name;
+  }
+
+  function buildGoogleCalendarUrl() {
+    var dates = bookingEventDates();
+    if (!dates) return "#";
+    var params = [
+      "action=TEMPLATE",
+      "text=" + encodeURIComponent(CALENDAR_TITLE[currentLang]),
+      "dates=" + toUtcCompact(dates.start) + "/" + toUtcCompact(dates.end),
+      "details=" + encodeURIComponent(bookingCalendarDetails()),
+      "location=" + encodeURIComponent(CALENDAR_LOCATION)
+    ];
+    return "https://calendar.google.com/calendar/render?" + params.join("&");
+  }
+
+  function buildIcsDataUri() {
+    var dates = bookingEventDates();
+    if (!dates) return "#";
+    var uid = "duna-" + Date.now() + "@duna-tulum.demo";
+    var lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//DUNA//Reservas//ES",
+      "BEGIN:VEVENT",
+      "UID:" + uid,
+      "DTSTAMP:" + toUtcCompact(new Date()),
+      "DTSTART:" + toUtcCompact(dates.start),
+      "DTEND:" + toUtcCompact(dates.end),
+      "SUMMARY:" + CALENDAR_TITLE[currentLang],
+      "DESCRIPTION:" + bookingCalendarDetails().replace(/\n/g, "\\n"),
+      "LOCATION:" + CALENDAR_LOCATION,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ];
+    return "data:text/calendar;charset=utf8," + encodeURIComponent(lines.join("\r\n"));
   }
 
   function isBookingStepValid(stepName) {
